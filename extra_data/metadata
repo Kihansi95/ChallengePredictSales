@@ -1,0 +1,6 @@
+This folder contains extra data that may be used (and useful) for the training. 
+
+The file store.csv contains information for each store (id. number of the store is given in the first column, 
+and corresponds to the first column in the other dataset (store_train.data for example))
+
+The file variables.txt explains the meaning of the variables. 
