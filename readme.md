@@ -1,9 +1,11 @@
-# Getting started:
+# Store project 
+
+## Getting started:
 `conda create -f final_project.yml`
 
 You should work on **adapted_REAMDE.ipynb**
 
-# Error notice:
+## Error notice:
 
 * **Cannot import get_installed_distributions**: Replace in __ingestion_program/data_io.py__ at line 37
 ```python
