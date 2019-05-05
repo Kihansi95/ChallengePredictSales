@@ -11,6 +11,11 @@ import numpy as np   # We recommend to use numpy arrays
 from os.path import isfile
 from sklearn.linear_model import LinearRegression
 
+from sklearn.ensemble import RandomForestRegressor
+
+from keras.models import Sequential
+from keras.layers import Dense
+
 class model:
     def __init__(self):
         '''
@@ -21,6 +26,13 @@ class model:
         self.num_feat=1
         self.num_labels=1
         self.is_trained=False
+        
+        model = Sequential()
+        model.add(Dense(13, input_dim=11, kernel_initializer='normal', activation='relu'))
+        model.add(Dense(1, kernel_initializer='normal'))
+        # Compile model
+        model.compile(loss='mean_squared_error', optimizer='adam')
+        self.model = model
 
     def fit(self, X, y):
         '''
@@ -44,9 +56,18 @@ class model:
         #print("FIT: dim(y)= [{:d}, {:d}]").format(num_train_samples, self.num_labels)
         if (self.num_train_samples != num_train_samples):
             print("ARRGH: number of samples in X and y do not match!")
-            
-        regressor = LinearRegression() 
-        self.model = regressor.fit(X,y)
+         
+        # === Linear Regression
+        # regressor = LinearRegression()
+        # self.model = regressor.fit(X,y)
+        
+        # === Random forest
+        self.model = RandomForestRegressor()
+        self.model.fit(X,y)
+        
+        # === Neural network
+        # self.model.fit(X,y, epochs=100)
+        
         self.is_trained=True
 
     def predict(self, X):
@@ -69,8 +90,12 @@ class model:
         #print("PREDICT: dim(y)= [{:d}, {:d}]").format(num_test_samples, self.num_labels)
         #y = np.zeros([num_test_samples, self.num_labels])
         y = self.model.predict(X)
+        
+        #=== Neural network
+        # return y.T
+        
         return y
-
+    
     def save(self, path="./"):
         pickle.dump(self, open(path + '_model.pickle', "w"))
 

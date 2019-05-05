@@ -20,6 +20,7 @@ from itertools import chain
 from collections import deque
 
 from sklearn import preprocessing
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 try:
     from reprlib import repr
@@ -226,13 +227,26 @@ def data(filename, nbr_features=None, verbose=False):
     data_matrix = np.array(data_converter.file_to_array(filename, verbose=verbose))
 
     if data_matrix.shape[1] > 1:
+        
         # Case data = X
         data_matrix[:, 2] = data_matrix[:, 2].astype('datetime64').astype(float)
 
-        cat_column = 6  # categorical column in matrix
-        data_matrix = np.append(data_matrix, pd.get_dummies(data_matrix[:, cat_column]), axis=1)
+        # ====== use pandas' dummies
+        #cat_column = 6  # categorical column in matrix
 
-        data_matrix = np.delete(data_matrix, cat_column, 1)
+        #data_matrix = np.append(data_matrix, pd.get_dummies(data_matrix[:, cat_column]), axis=1)
+        #data_matrix = np.append(data_matrix, pd.get_dummies(data_matrix[:, 1]), axis=1)
+
+        #data_matrix = np.delete(data_matrix, cat_column, 1)
+        #data_matrix = np.delete(data_matrix, 1, 1)
+
+        # ====== use OneHotEncoder
+        label_enc = LabelEncoder()
+        data_matrix[:, 6] = label_enc.fit_transform(data_matrix[:, 6])
+
+        onehot_enc = OneHotEncoder(categorical_features = [1, 6], n_values='auto')
+        data_matrix = onehot_enc.fit_transform(data_matrix)
+
     # else: Case data = Y_hat
 
 
